@@ -13,7 +13,7 @@ public class Main {
 
        mainWindow.setVisible(true);   
        mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-       
+       mainWindow.setLocationRelativeTo(null); 
        gamePanel.startGameThread();
     }
 }

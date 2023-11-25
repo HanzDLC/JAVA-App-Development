@@ -1,17 +1,16 @@
 package main;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-
 import javax.swing.JPanel;
+import entity.Player;
 
 
 public class GamePanel extends JPanel implements Runnable {
     final int MainSize = 16; //character size
     final int ScaleSize = 3; //character scaling 
-    final int TileSize = MainSize * ScaleSize; 
+    public final int TileSize = MainSize * ScaleSize; 
     final int ScreenColumn = 16; // Y value for tiles
     final int ScreenRow = 12;    // X value for tiles 
     final int ScreenWidth = TileSize * ScreenColumn;
@@ -20,12 +19,14 @@ public class GamePanel extends JPanel implements Runnable {
     int FPS = 60;
 
     KeyboardInput keyboardInput = new KeyboardInput();
-
     Thread gameThread;
+    Player player = new Player(this, keyboardInput);
+    
+   
 
     int PlayerPositionX = 50; // fixed x position of character
     int PlayerPositionY = 50; // fixed y position of character
-    int playerSpeed = 3; // Pixels skipped by the main character to move 
+    int playerSpeed = 10; // Pixels skipped by the main character to move 
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(ScreenWidth,ScreenHeight));
@@ -33,6 +34,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyboardInput);
         this.setFocusable(true);
+        
 
     }
     
@@ -74,22 +76,16 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        if (keyboardInput.UpKey == true) {
-            PlayerPositionY -= playerSpeed;
-        } else if (keyboardInput.DownKey == true) {
-            PlayerPositionY += playerSpeed; 
-        } else if (keyboardInput.LeftKey == true) {
-            PlayerPositionX -= playerSpeed;
-        } else if (keyboardInput.RightKey == true) {
-            PlayerPositionX += playerSpeed;
-        } 
+    	player.update();
+    	
     }
+    
     
     public void paintComponent (Graphics graphics) {
         super.paintComponent(graphics);
-        Graphics2D graph2D = (Graphics2D)graphics; // Change Graphics graphics to Graphics2D(more functions)
-        graph2D.setColor(Color.cyan);
-        graph2D.fillRect(PlayerPositionX, PlayerPositionY, TileSize, TileSize); // add a rectangle to the screen with a fixed position 
+        Graphics2D graph2D = (Graphics2D)graphics; 
+        player.draw(graph2D);
+        
         graph2D.dispose();
     }
 }
