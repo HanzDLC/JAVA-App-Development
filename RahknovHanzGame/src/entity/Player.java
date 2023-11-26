@@ -29,7 +29,7 @@ public class Player extends Entity {
 	{
 		x = 50;
 		y = 50;
-		speed = 4;
+		speed = 2;
 		direction = "down";
 	}
 	

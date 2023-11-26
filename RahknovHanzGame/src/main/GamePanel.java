@@ -5,18 +5,21 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
 import entity.Player;
+import tile.TileManager;
 
 
 public class GamePanel extends JPanel implements Runnable {
     final int MainSize = 16; //character size
     final int ScaleSize = 3; //character scaling 
+   
     public final int TileSize = MainSize * ScaleSize; 
-    final int ScreenColumn = 16; // Y value for tiles
-    final int ScreenRow = 12;    // X value for tiles 
-    final int ScreenWidth = TileSize * ScreenColumn;
-    final int ScreenHeight = TileSize * ScreenRow;
+    public final int ScreenColumn = 16; // Y value for tiles
+    public final int ScreenRow = 12;    // X value for tiles 
+    public final int ScreenWidth = TileSize * ScreenColumn;
+    public final int ScreenHeight = TileSize * ScreenRow;
     
     int FPS = 60;
+    TileManager tileManage = new TileManager(this);
 
     KeyboardInput keyboardInput = new KeyboardInput();
     Thread gameThread;
@@ -24,9 +27,6 @@ public class GamePanel extends JPanel implements Runnable {
     
    
 
-    int PlayerPositionX = 50; // fixed x position of character
-    int PlayerPositionY = 50; // fixed y position of character
-    int playerSpeed = 10; // Pixels skipped by the main character to move 
 
     public GamePanel(){
         this.setPreferredSize(new Dimension(ScreenWidth,ScreenHeight));
@@ -34,14 +34,13 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyboardInput);
         this.setFocusable(true);
-        
+        startGameThread();
 
     }
     
-    public void startGameThread(){
+    public void startGameThread() {
         gameThread = new Thread(this);
-        gameThread.start(); 
-
+        gameThread.start();
     }
 
     @Override
@@ -72,7 +71,9 @@ public class GamePanel extends JPanel implements Runnable {
             drawCount = 0; 
             timer = 0; 
         }
+        
        }
+       
     }
 
     public void update() {
@@ -84,8 +85,8 @@ public class GamePanel extends JPanel implements Runnable {
     public void paintComponent (Graphics graphics) {
         super.paintComponent(graphics);
         Graphics2D graph2D = (Graphics2D)graphics; 
+        tileManage.draw(graph2D);
         player.draw(graph2D);
-        
         graph2D.dispose();
     }
 }
